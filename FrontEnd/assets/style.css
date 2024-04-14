@@ -28,9 +28,24 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
-body {
-	line-height: 1;
+
+html body main {
+	height: 100%;
 }
+
+body {
+	min-height: 100vh;
+	background-color: #FFFEF8;
+	display: flex;
+	flex-direction: column;
+}
+
+footer {
+	margin-top: auto;
+	height: 60px;
+	background-color: white;
+}
+
 ol, ul {
 	list-style: none;
 }
@@ -95,8 +110,13 @@ nav li {
 	font-size: 1.2em;
 }
 
+nav .activeNav {
+	font-weight: 700;
+}
+
 li:hover {
 	color: #B1663C;
+	cursor: pointer;
 }
 #introduction {
 	display: flex;
@@ -218,6 +238,46 @@ margin: auto;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
+#loginPage {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	align-items: center;
+}
+
+#loginPage h2 {
+	margin-bottom: 16px;
+}
+
+#loginPage form {
+	display: flex;
+	width: 33%;
+	flex-direction: column;
+	justify-content: center;
+	gap: 8px;
+}
+
+#loginPage label {
+	text-align: left;
+	margin: 2em 0 0  0;
+}
+
+#loginPage input {
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+#loginPage #forgottenPassword {
+	color: black;
+	text-align: center;
+}
+
+#loginPage #forgottenPassword:hover {
+	color: #B1663C;
+}
+
 input[type="submit"]{
 	font-family: 'Syne';
 	font-weight: 700;
@@ -229,9 +289,18 @@ input[type="submit"]{
 	border-radius: 60px ;
 }
 
-footer nav ul {
+input[type="submit"]:hover {
+	cursor: pointer;
+}
+
+footer nav {
+	height: inherit;
+}
+footer ul {
+	height: inherit;
 	display: flex;
 	justify-content: flex-end;
-	margin: 2em
+	vertical-align: middle;
+	margin-right: 4em;
 }
 

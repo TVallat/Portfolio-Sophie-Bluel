@@ -1,10 +1,11 @@
 
 // Rangement des travaux par catégories
-const tout = [];
+let tout = [];
 const objets = [];
 const appartement = [];
 const hotelsEtRestaurants = [];
 //
+const mainPage = document.querySelector("main"); // Récupèration du conteneur main
 const gallery = document.querySelector(".gallery"); // Récupèration du conteneur d'affichage des travaux.
 const filtersContainer = document.querySelector(".categories"); // Récupèration du conteneur des catégories de filtre.
 //
@@ -15,6 +16,7 @@ async function startPage() { // 1ere initialisation de la page;
     displayWorks(tout);
     displayFilters();
     filterWorks();
+    loginPage();
 }
 
 async function getWorks() { // Récupère les travaux dans l'API au format JSON;
@@ -88,6 +90,16 @@ function filterWorks() { // Filtre les travaux quand un des filtres est cliqué 
                 default: break;
             }
         });
+    })
+}
+
+function loginPage() {
+    const loginBtn = document.querySelector("#login");
+    loginBtn.addEventListener('click', function (event) {
+        event.preventDefault();
+        window.location.href = "login.html"
+        const main = document.querySelector("main");
+
     })
 }
 
