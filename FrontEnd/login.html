@@ -1,49 +1,64 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
 	<meta charset="UTF-8">
 	<title>Sophie Bluel - Connexion</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap"
+		rel="stylesheet">
+	<script src="https://kit.fontawesome.com/42b8b46a86.js" crossorigin="anonymous"></script>
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
+	<link rel="stylesheet" href="./assets/login-style.css">
+	<link rel="stylesheet" href="./assets/edition-style.css">
 	<script src="login.js" defer></script>
 </head>
+
 <body>
-<header>
-	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
-	<nav>
-		<ul>
-			<li>projets</li>
-			<li>contact</li>
-			<li class="activeNav">login</li>
-			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
-		</ul>
-	</nav>
-</header>
+	<header class="default-header">
+		<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
+		<nav>
+			<ul>
+				<li id="projets">projets</li>
+				<li>contact</li>
+				<li class="activeNav">login</li>
+				<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
+			</ul>
+		</nav>
+	</header>
 
-<main>
-	<section id="loginPage">
-		<h2>Log In</h2>
-		<form action="#" method="post">
-			<label for="email">E-mail</label>
-			<input type="email" name="email" id="email">
-			<label for="password">Mot de passe</label>
-			<input type="password" name="password" id="password">
-			<input type="submit" value="Se connecter">
-			<a id="forgottenPassword" href="#">Mot de passe oublié</a>
-		</form>
-	</section>
-</main>
+	<main>
+		<section id="loginPage">
+			<h2>Log In</h2>
+			<form action="#" method="post">
+				<label for="email">E-mail</label>
+				<input type="email" name="email" id="email">
+				<label for="password">Mot de passe</label>
+				<input type="password" name="password" id="password">
+				<input type="submit" value="Se connecter" id="submit">
+				<a id="forgottenPassword" href="#">Mot de passe oublié</a>
+			</form>
+		</section>
+	</main>
+	<footer>
+		<nav>
+			<ul>
+				<li>Mentions Légales</li>
+			</ul>
+		</nav>
+	</footer>
 
-<footer>
-	<nav>
-		<ul>
-			<li>Mentions Légales</li>
-		</ul>
-	</nav>
-</footer>
+	<!-- Modale -->
+	<div class="popup-window">
+		<div class="popup"> <!--Mettre à l'extérieur de la modale-->
+			<h3 id="popupText"><!--Java--></h3>
+			<button id="loginBtn" class="popupBtn"><!--Java--></button>
+		</div>
+		<div class="popup-background"></div>
+	</div>
 </body>
+
 </html>

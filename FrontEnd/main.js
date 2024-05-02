@@ -1,6 +1,4 @@
-
 // Rangement des travaux par catégories
-let tout = [];
 const objets = [];
 const appartement = [];
 const hotelsEtRestaurants = [];
@@ -11,12 +9,12 @@ const filtersContainer = document.querySelector(".categories"); // Récupèratio
 //
 
 async function startPage() { // 1ere initialisation de la page;
-    tout = await getWorks();
     createWorksArrays();
-    displayWorks(tout);
+    displayWorks(await getWorks());
     displayFilters();
     filterWorks();
-    loginPage();
+    loginTab();
+    getCategories();
 }
 
 async function getWorks() { // Récupère les travaux dans l'API au format JSON;
@@ -46,10 +44,11 @@ async function displayWorks(worksToDisplay) { // Affiche les travaux demandés.
 }
 
 async function displayFilters() { // Récupère les catégories dans l'API et affiche dynamiquement les filtres correspondants en HTML.
+    let works = await getWorks();
     let filtersHtml = ``;
     filtersHtml += `<a href="#" data-category="0" class="active">Tous</a>`;
     const categorySet = new Set();
-    tout.forEach(element => {
+    works.forEach(element => {
         if (!categorySet.has(element.categoryId)) {
             categorySet.add(element.categoryId);
             filtersHtml += `
@@ -72,7 +71,20 @@ async function createWorksArrays() { // Trie les travaux dans des tableaux selon
     });
 }
 
-function filterWorks() { // Filtre les travaux quand un des filtres est cliqué à l'écran.
+function wipeWorksArrays() {
+    while (objets.length) {
+        objets.pop();
+    }
+    while (appartement.length) {
+        appartement.pop();
+    }
+    while (hotelsEtRestaurants.length) {
+        hotelsEtRestaurants.pop();
+    }
+}
+
+async function filterWorks() { // Filtre les travaux quand un des filtres est cliqué à l'écran.
+    const displayAllWorks = await getWorks();
     const filters = document.querySelectorAll('.categories a');
     filters.forEach(filter => {
         filter.addEventListener('click', function (event) {
@@ -83,23 +95,13 @@ function filterWorks() { // Filtre les travaux quand un des filtres est cliqué 
             filter.classList.add("active");
             const category = filter.getAttribute('data-category');
             switch (category) {
-                case ("0"): displayWorks(tout); break;
+                case ("0"): displayWorks(displayAllWorks); break;
                 case ("1"): displayWorks(objets); break;
                 case ("2"): displayWorks(appartement); break;
                 case ("3"): displayWorks(hotelsEtRestaurants); break;
                 default: break;
             }
         });
-    })
-}
-
-function loginPage() {
-    const loginBtn = document.querySelector("#login");
-    loginBtn.addEventListener('click', function (event) {
-        event.preventDefault();
-        window.location.href = "login.html"
-        const main = document.querySelector("main");
-
     })
 }
 

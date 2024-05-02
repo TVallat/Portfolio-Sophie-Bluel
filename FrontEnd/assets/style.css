@@ -68,11 +68,19 @@ body {
 	font-family: 'Work Sans' ;
 	font-size: 14px;
 }
+
 header {
 	display: flex;
+	flex-direction: column;
+}
+
+.default-header {
+	display: flex;
+	flex-direction: row;
 	justify-content: space-between;
 	margin: 50px 0
 }
+
 section {
 	margin: 50px 0
 }
@@ -141,10 +149,6 @@ li:hover {
 #introduction p {
 	margin-bottom: 0.5em;
 }
-#portfolio h2 {
-	text-align: center;
-	margin-bottom: 1em;
-}
 
 #portfolio nav {
 	display: flex;
@@ -184,12 +188,12 @@ nav .categories a:hover {
 	background-color: lightyellow;
 }
 
-nav .categories .active {
+nav .categories .active { /* Couleurs de base du filtre */
 	color : white;
 	background-color: #1D6154;
 }
 
-nav .categories .active:hover {
+nav .categories .active:hover { /* Quand le filtre est actif, l'hover ne modifie plus son apparence */
 	color: white;
 	background-color: #1D6154;
 }
@@ -204,12 +208,13 @@ nav .categories .active:hover {
 
 .gallery img {
 	width: 100%;
-
 }
+
 #contact {
 	width: 50%;
-margin: auto;
+	margin: auto;
 }
+
 #contact > * {
 	text-align: center;
 
@@ -238,47 +243,7 @@ margin: auto;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-#loginPage {
-	display: flex;
-	flex-direction: column;
-	height: 100%;
-	align-items: center;
-}
-
-#loginPage h2 {
-	margin-bottom: 16px;
-}
-
-#loginPage form {
-	display: flex;
-	width: 33%;
-	flex-direction: column;
-	justify-content: center;
-	gap: 8px;
-}
-
-#loginPage label {
-	text-align: left;
-	margin: 2em 0 0  0;
-}
-
-#loginPage input {
-	height: 50px;
-	font-size: 1.2em;
-	border: none;
-	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
-}
-
-#loginPage #forgottenPassword {
-	color: black;
-	text-align: center;
-}
-
-#loginPage #forgottenPassword:hover {
-	color: #B1663C;
-}
-
-input[type="submit"]{
+input[type="submit"] {
 	font-family: 'Syne';
 	font-weight: 700;
 	color: white;
