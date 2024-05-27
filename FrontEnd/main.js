@@ -1,7 +1,7 @@
 // Rangement des travaux par catégories
-const objets = [];
-const appartement = [];
-const hotelsEtRestaurants = [];
+let objets = [];
+let appartement = [];
+let hotelsEtRestaurants = [];
 //
 const mainPage = document.querySelector("main"); // Récupèration du conteneur main
 const gallery = document.querySelector(".gallery"); // Récupèration du conteneur d'affichage des travaux.
@@ -72,15 +72,9 @@ async function createWorksArrays() { // Trie les travaux dans des tableaux selon
 }
 
 function wipeWorksArrays() {
-    while (objets.length) {
-        objets.pop();
-    }
-    while (appartement.length) {
-        appartement.pop();
-    }
-    while (hotelsEtRestaurants.length) {
-        hotelsEtRestaurants.pop();
-    }
+    objets = [];
+    appartement = [];
+    hotelsEtRestaurants = [];
 }
 
 async function filterWorks() { // Filtre les travaux quand un des filtres est cliqué à l'écran.
@@ -103,6 +97,18 @@ async function filterWorks() { // Filtre les travaux quand un des filtres est cl
             }
         });
     })
+}
+
+function resetToAllFilter() {
+    const filters = document.querySelectorAll('.categories a');
+    filters.forEach(filter => {
+        filter.classList.remove("active");
+    });
+    filters.forEach(filter => {
+        if (filter.getAttribute('data-category') === "0") {
+            filter.classList.add("active");
+        }
+    });
 }
 
 startPage();

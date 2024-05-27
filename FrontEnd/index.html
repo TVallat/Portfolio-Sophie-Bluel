@@ -116,22 +116,22 @@
 				<i class="fa-solid fa-xmark"></i>
 			</div>
 			<h3>Ajout photo</h3>
-			<form action="/upload" method="post" enctype="multipart/form-data">
+			<form id="workSubmitForm" action="/upload" method="post" enctype="multipart/form-data">
 				<div class="photo-area">
 					<div class="photo-form">
 						<i class="fa-regular fa-image"></i>
 						<label for="file">+ Ajouter photo</label>
-						<input type="file" id="file" name="file" accept="image/png, image/jpeg" onchange="afficherImage(event)">
+						<input type="file" id="file" name="file" accept="image/png, image/jpeg" onchange="afficherImage(event)" required>
 						<p>jpg, png : 4mo max</p>
 					</div>
 					<div class="image-area"></div>
 				</div>
 				<label for="titre">Titre</label>
-				<input type="text" name="titre" id="titre">
+				<input type="text" name="titre" id="titre" required>
 				<label for="category-dropdown">Categorie</label>
-				<select name="choice" id="category-dropdown"><!-- Javascript !--></select>
+				<select name="choice" id="category-dropdown" required><!-- Javascript !--></select>
 				<p class="separation-line"></p>
-				<input type="submit" value="Valider" id="workSubmit">
+				<input type="submit" value="Valider" id="workSubmit" disabled>
 			</form>
 		</div>
 		<!-- Background de la modale -->

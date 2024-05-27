@@ -54,7 +54,6 @@ function openPopupWindow() {
             displayWorksInEdit();
             getCategories(); // A modifier
             closePopupWindow();
-            console.log("Flex");
         })
     }
 }
@@ -87,6 +86,7 @@ function backward() {
     formPopUp.style.display = "none";
     photoForm.style.display = "flex";
     photoArea.style.display = "none";
+    wipeWorkSubmitFormula();
 }
 
 async function displayWorksInEdit() { // Affiche les travaux demandés.
@@ -129,11 +129,36 @@ async function deleteWork(id) {
         } else {
             console.log("Le tavail a été supprimé.")
             updateWorks();
+            resetToAllFilter();
         };
     }
     catch (error) {
         console.error('Erreur: ', error);
     }
+}
+
+function checkWorkSubmit() {
+    const form = document.getElementById('workSubmitForm');
+    const submitButton = document.getElementById('workSubmit');
+    const requiredFields = form.querySelectorAll('[required]');
+
+    form.addEventListener('input', () => {
+        let allFieldsFilled = true;
+
+        requiredFields.forEach(field => {
+            if (!field.value) {
+                allFieldsFilled = false;
+            }
+        });
+
+        if (allFieldsFilled) {
+            submitButton.classList.add('enabled');
+            submitButton.disabled = false;
+        } else {
+            submitButton.classList.remove('enabled');
+            submitButton.disabled = true;
+        }
+    });
 }
 
 function handleWorkSubmit(event) {
@@ -148,6 +173,16 @@ function handleWorkSubmit(event) {
     addWork(imageFile, title, category);
 }
 
+function wipeWorkSubmitFormula() {
+    const imageFile = document.getElementById('file');
+    const title = document.getElementById('titre');
+    const category = document.getElementById('category-dropdown');
+
+    imageFile.value = '';
+    title.value = '';
+    category.value = '';
+}
+
 async function addWork(imageFile, title, category) {
     const token = getToken();
     const formData = new FormData();
@@ -158,7 +193,7 @@ async function addWork(imageFile, title, category) {
     fr.onload = async () => {
         // you can keep blob or save blob to another position
         const blob = new Blob([fr.result]);
-        console.log(blob);
+        // console.log(blob);
 
         formData.append('image', blob);
         formData.append('title', title);
@@ -175,6 +210,8 @@ async function addWork(imageFile, title, category) {
         } else {
             console.log("Le tavail a été créé.")
             updateWorks();
+            resetToAllFilter();
+            wipeWorkSubmitFormula();
             backward();
         };
     }
@@ -183,6 +220,7 @@ async function addWork(imageFile, title, category) {
 function openPhotoWindow() {
     const addPhotoBtn = document.querySelector('#add-photo-button');
     addPhotoBtn.addEventListener('click', function (event) {
+        wipeWorkSubmitFormula();
         editionPopUp.style.display = "none";
         formPopUp.style.display = "flex";
     });
@@ -202,7 +240,6 @@ async function getCategories() { // Récupère les catégories dans l'API et les
         }
     });
     categoryDropdown.innerHTML = filtersHtml;
-    console.log("categories ok");
 }
 
 function afficherImage(event) {
@@ -210,7 +247,6 @@ function afficherImage(event) {
     const file = input.files[0];
     if (file) {
         const reader = new FileReader();
-        console.log("ok");
         photoArea.innerHTML = `<img src="#" id="imagePreview" style="display: none;" alt="Image preview"></img>`;
         const image = document.querySelector('#imagePreview');
         reader.onload = function () {
@@ -237,6 +273,7 @@ function addEventListeners() {
     openPopupWindow();
     openPhotoWindow();
     returnToEditWindow();
+    checkWorkSubmit();
 }
 
 addEventListeners();

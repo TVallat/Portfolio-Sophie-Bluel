@@ -42,7 +42,7 @@ async function login(email, password) {
         } else {
             const loginData = await response.json();
             const token = loginData.token;
-            console.log(token);
+            console.log("Token : " + token);
             sessionStorage.setItem('token', token);
             localStorage.setItem('token', token);
             drawPopup(true);
