@@ -8,13 +8,19 @@ const gallery = document.querySelector(".gallery"); // Récupèration du contene
 const filtersContainer = document.querySelector(".categories"); // Récupèration du conteneur des catégories de filtre.
 //
 
-async function startPage() { // 1ere initialisation de la page;
-    createWorksArrays();
-    displayWorks(await getWorks());
-    displayFilters();
-    filterWorks();
-    loginTab();
-    getCategories();
+
+async function startPage() { // Premier lancement de la page web.
+    try {
+        createWorksArrays();
+        const categories = await getCategories();
+        const works = await getWorks();
+        displayFilters(categories);
+        displayWorks(works);
+        filterWorks();
+        loginTab();
+    } catch (error) {
+        console.error('Erreur lors de l\'initialisation de la page :', error);
+    }
 }
 
 async function getWorks() { // Récupère les travaux dans l'API au format JSON;
@@ -26,9 +32,22 @@ async function getWorks() { // Récupère les travaux dans l'API au format JSON;
         return await response.json();
     } catch (error) {
         console.error('Erreur: ', error);
+        return [];
     }
 }
 
+async function getCategories() { // Récupère les catégories dans l'API au format JSON.
+    try {
+        const response = await fetch('http://localhost:5678/api/categories');
+        if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données des catégories.');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Erreur: ', error);
+        return [];
+    }
+}
 
 async function displayWorks(worksToDisplay) { // Affiche les travaux demandés.
     let workHtml = ``;
@@ -43,38 +62,18 @@ async function displayWorks(worksToDisplay) { // Affiche les travaux demandés.
     gallery.innerHTML = workHtml;
 }
 
-async function displayFilters() { // Récupère les catégories dans l'API et affiche dynamiquement les filtres correspondants en HTML.
-    let works = await getWorks();
+
+
+async function displayFilters(categoriesToDisplay) { // Affiche dynamiquement les filtres correspondants en HTML.
     let filtersHtml = ``;
     filtersHtml += `<a href="#" data-category="0" class="active">Tous</a>`;
-    const categorySet = new Set();
-    works.forEach(element => {
-        if (!categorySet.has(element.categoryId)) {
-            categorySet.add(element.categoryId);
+    categoriesToDisplay.forEach(element => {
             filtersHtml += `
-            <a href="#" data-category="${element.categoryId}">${element.category.name}</a>
+            <a href="#" data-category="${element.id}">${element.name}</a>
             `
         }
-    });
+    );
     filtersContainer.innerHTML = filtersHtml;
-}
-
-async function createWorksArrays() { // Trie les travaux dans des tableaux selon leur catégorie // Modifier sort
-    const workList = await getWorks();
-    workList.forEach(element => {
-        switch (element.categoryId) {
-            case (1): objets.push(element); break;
-            case (2): appartement.push(element); break;
-            case (3): hotelsEtRestaurants.push(element); break;
-            default: break;
-        }
-    });
-}
-
-function wipeWorksArrays() {
-    objets = [];
-    appartement = [];
-    hotelsEtRestaurants = [];
 }
 
 async function filterWorks() { // Filtre les travaux quand un des filtres est cliqué à l'écran.
@@ -99,7 +98,26 @@ async function filterWorks() { // Filtre les travaux quand un des filtres est cl
     })
 }
 
-function resetToAllFilter() {
+async function createWorksArrays() { // Trie les travaux dans des tableaux selon leur catégorie
+    const workList = await getWorks();
+    workList.forEach(element => {
+        switch (element.categoryId) {
+            case (1): objets.push(element); break;
+            case (2): appartement.push(element); break;
+            case (3): hotelsEtRestaurants.push(element); break;
+            default: break;
+        }
+    });
+}
+
+function wipeWorksArrays() { // Nettoie les tableaux.
+    objets = [];
+    appartement = [];
+    hotelsEtRestaurants = [];
+}
+
+
+function resetToAllFilter() { // Renvoie au filtre "tout".
     const filters = document.querySelectorAll('.categories a');
     filters.forEach(filter => {
         filter.classList.remove("active");

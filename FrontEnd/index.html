@@ -28,12 +28,12 @@
 
 		<div class="default-header">
 			<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
-			<nav>
-				<ul>
+			<nav class="nav-header">
+				<ul class="ul-header">
 					<li>projets</li>
-					<li>contact</li>
+					<li><a href="#contact">contact</a></li>
 					<li id="login">login</li>
-					<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
+					<li><i class="fa-brands fa-instagram"></i></li>
 				</ul>
 			</nav>
 		</div>
@@ -129,7 +129,7 @@
 				<label for="titre">Titre</label>
 				<input type="text" name="titre" id="titre" required>
 				<label for="category-dropdown">Categorie</label>
-				<select name="choice" id="category-dropdown" required><!-- Javascript !--></select>
+				<select name="choice" id="category-dropdown" required><!-- affiché via la fonction assignDropdownCategories()--></select>
 				<p class="separation-line"></p>
 				<input type="submit" value="Valider" id="workSubmit" disabled>
 			</form>

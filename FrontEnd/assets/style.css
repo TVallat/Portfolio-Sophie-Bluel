@@ -49,6 +49,12 @@ footer {
 ol, ul {
 	list-style: none;
 }
+
+a {
+	color: black;
+	text-decoration: none;
+}
+
 blockquote, q {
 	quotes: none;
 }
@@ -122,7 +128,7 @@ nav .activeNav {
 	font-weight: 700;
 }
 
-li:hover {
+a:hover, li:hover {
 	color: #B1663C;
 	cursor: pointer;
 }
@@ -155,6 +161,21 @@ li:hover {
 	justify-content: center;
 	text-align: center;
 	margin-bottom: 30px;
+}
+
+.nav-header {
+	display: flex;
+	justify-content: center;
+	text-align: center;
+}
+
+.ul-header {
+	display: flex;
+	gap: 20px;	
+}
+
+.fa-instagram {
+	font-size: 22px;
 }
 
 nav .categories {

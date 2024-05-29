@@ -1,3 +1,4 @@
+// Récupèration des éléments HTML
 const loginBtn = document.querySelector("#login");
 const editionPanel = document.querySelector('.edition-background');
 const modify = document.querySelector('#modify');
@@ -9,7 +10,7 @@ const photoArea = document.querySelector('.image-area');
 const editionBackground = document.querySelector('.popup-background');
 const editionGallery = document.querySelector('.edition-gallery');
 
-function getToken() {
+function getToken() { // Récupère le token en local ou en session selon disponibilité.
     if (localStorage.getItem('token') !== null) {
         return localStorage.getItem('token');
     } else if (sessionStorage.getItem('token')) { // Si le navigateur bloque le stockage local, alors on vérifie le stockage de session.
@@ -25,12 +26,12 @@ function deleteToken() {
     sessionStorage.clear('token');
 }
 
-function loginTab() {
+function loginTab() { // Mises en page de index.html selon l'état de connexion.
     if (getToken()) {
-        loginBtn.classList.add('activeNav');
         loginBtn.textContent = "logout"
         editionPanel.style.display = "flex";
         modify.style.display = "flex";
+        filtersContainer.style.display = "none";
         document.getElementById('workSubmit').addEventListener('click', handleWorkSubmit);
         loginBtn.addEventListener('click', function (event) {
             event.preventDefault();
@@ -45,43 +46,43 @@ function loginTab() {
     }
 }
 
-function openPopupWindow() {
+function openPopupWindow() { // Ouverture de la modale d'édition
     if (getToken()) {
         modify.addEventListener('click', function (event) {
             popupWindow.style.display = "flex";
             editionPopUp.style.display = "flex";
             formPopUp.style.display = "none";
             displayWorksInEdit();
-            getCategories(); // A modifier
+            assignDropdownCategories();
             closePopupWindow();
         })
     }
 }
 
-function closePopupWindow() {
+function closePopupWindow() { // Fermeture de la modale d'édition
     const exitCross = document.querySelectorAll('.fa-xmark');
-    exitCross.forEach(function (element) {
+    exitCross.forEach(function (element) { // avec la croix de fermeture.
         element.addEventListener('click', function (event) {
             popupWindow.style.display = "none";
             photoForm.style.display = "flex";
             photoArea.style.display = "none";
         });
     })
-    editionBackground.addEventListener('click', function (event) {
+    editionBackground.addEventListener('click', function (event) { // en cliquant hors de la modale.
         popupWindow.style.display = "none";
         photoForm.style.display = "flex";
         photoArea.style.display = "none";
     });
 }
 
-function returnToEditWindow() {
+function returnToEditWindow() { // Retour page précédente de la modale avec la fleche.
     const leftArrow = document.querySelector('.fa-arrow-left');
     leftArrow.addEventListener('click', function (event) {
         backward();
     })
 }
 
-function backward() {
+function backward() { // Fonction de retour liée à returnToEditWindow()
     editionPopUp.style.display = "flex";
     formPopUp.style.display = "none";
     photoForm.style.display = "flex";
@@ -89,10 +90,10 @@ function backward() {
     wipeWorkSubmitFormula();
 }
 
-async function displayWorksInEdit() { // Affiche les travaux demandés.
+async function displayWorksInEdit() { // Affiche tous les travaux demandés.
     let worksToDisplay = await getWorks();
     let workHtml = ``;
-    worksToDisplay.forEach(element => { // Template HTML à mettre en place + sécuriser
+    worksToDisplay.forEach(element => { 
         workHtml += `
         <figure>
             <img src="${element.imageUrl}" alt="${element.title}">
@@ -106,7 +107,7 @@ async function displayWorksInEdit() { // Affiche les travaux demandés.
     deleteListener();
 }
 
-function deleteListener() {
+function deleteListener() { // Ajout de la fonction deleteWork(id) au clic dans la modale d'édition.
     const deleteIcons = document.querySelectorAll(".fa-trash-can");
     deleteIcons.forEach(element => {
         element.addEventListener('click', function (event) {
@@ -115,7 +116,7 @@ function deleteListener() {
     })
 }
 
-async function deleteWork(id) {
+async function deleteWork(id) { // Supprime un travail dans l'API avec la methode DELETE. Necessite le token.
     try {
         const token = sessionStorage.getItem('token');
         const response = await fetch(`http://localhost:5678/api/works/${id}`, {
@@ -137,7 +138,7 @@ async function deleteWork(id) {
     }
 }
 
-function checkWorkSubmit() {
+function checkWorkSubmit() { // Vérifie si tous les champs du formulaire sont remplis avant d'activer la possibilité de submit.
     const form = document.getElementById('workSubmitForm');
     const submitButton = document.getElementById('workSubmit');
     const requiredFields = form.querySelectorAll('[required]');
@@ -151,19 +152,19 @@ function checkWorkSubmit() {
             }
         });
 
-        if (allFieldsFilled) {
+        if (allFieldsFilled) { // Une fois que tous les champs sont remplis.
             submitButton.classList.add('enabled');
             submitButton.disabled = false;
-        } else {
+        } else { // Si un des champ est vide
             submitButton.classList.remove('enabled');
             submitButton.disabled = true;
         }
     });
 }
 
-function handleWorkSubmit(event) {
+function handleWorkSubmit(event) { // Récupération des éléments du formulaire
+
     event.preventDefault();
-    // Récupération des éléments du formulaire
 
     const imageFile = document.getElementById('file').files[0];
     const title = document.getElementById('titre').value;
@@ -173,7 +174,7 @@ function handleWorkSubmit(event) {
     addWork(imageFile, title, category);
 }
 
-function wipeWorkSubmitFormula() {
+function wipeWorkSubmitFormula() { // RAZ du formulaire.
     const imageFile = document.getElementById('file');
     const title = document.getElementById('titre');
     const category = document.getElementById('category-dropdown');
@@ -183,31 +184,30 @@ function wipeWorkSubmitFormula() {
     category.value = '';
 }
 
-async function addWork(imageFile, title, category) {
+async function addWork(imageFile, title, category) { // Ajout d'un travail
     const token = getToken();
     const formData = new FormData();
 
-    const fr = new FileReader()
+    const fr = new FileReader(); // Utilise l'API FileReader
 
-    fr.readAsArrayBuffer(imageFile)
+    fr.readAsArrayBuffer(imageFile) // Lecture de l'image via FileReader.
     fr.onload = async () => {
-        // you can keep blob or save blob to another position
-        const blob = new Blob([fr.result]);
-        // console.log(blob);
 
-        formData.append('image', blob);
+        const blob = new Blob([fr.result]); // Transforme l'image lue par Filereader en Binary Large Object (blob).
+
+        formData.append('image', blob); // formData peut désormais lire l'image en tant que blob.
         formData.append('title', title);
         formData.append('category', category);
-        const response = await fetch('http://localhost:5678/api/works/', {
+        const response = await fetch('http://localhost:5678/api/works/', { // On POST le formData
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`
             },
             body: formData
         })
-        if (!response.ok) {
+        if (!response.ok) { // Le formulaire n'est pas correct.
             console.log("Le travail n'a pas été créé.")
-        } else {
+        } else { // Le formulaire est correct.
             console.log("Le tavail a été créé.")
             updateWorks();
             resetToAllFilter();
@@ -217,7 +217,7 @@ async function addWork(imageFile, title, category) {
     }
 }
 
-function openPhotoWindow() {
+function openPhotoWindow() { // Ouverture du menu "Ajouter une photo" de la modale d'édition.
     const addPhotoBtn = document.querySelector('#add-photo-button');
     addPhotoBtn.addEventListener('click', function (event) {
         wipeWorkSubmitFormula();
@@ -226,23 +226,20 @@ function openPhotoWindow() {
     });
 }
 
-async function getCategories() { // Récupère les catégories dans l'API et les affiche dans le dropdown.
-    let works = await getWorks();
+async function assignDropdownCategories() { // Récupère les catégories dans l'API et les affiche dans le dropdown.
+    const categories = await getCategories();
     const categoryDropdown = document.querySelector('#category-dropdown');
     let filtersHtml = ``;
-    const categorySet = new Set();
-    works.forEach(element => {
-        if (!categorySet.has(element.categoryId)) {
-            categorySet.add(element.categoryId);
+    categories.forEach(element => {
             filtersHtml += `
-            <option value="${element.categoryId}">${element.category.name}</option>
+            <option value="${element.id}">${element.name}</option>
             `
         }
-    });
+    );
     categoryDropdown.innerHTML = filtersHtml;
 }
 
-function afficherImage(event) {
+function afficherImage(event) { // Affiche l'image que l'on souhaite ajouter dans la modale
     const input = event.target;
     const file = input.files[0];
     if (file) {
@@ -254,13 +251,13 @@ function afficherImage(event) {
             image.style.display = 'block';
             image.style.width = '50%';
         }
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(file); // Permet au site de convertir l'image pour qu'elle soit lue sur le site web.
         photoForm.style.display = "none";
         photoArea.style.display = "flex";
     }
 }
 
-async function updateWorks() {
+async function updateWorks() { // Maj des travaux présents dans la bdd.
     displayWorksInEdit();
     displayWorks(await getWorks());
     wipeWorksArrays();
@@ -268,7 +265,7 @@ async function updateWorks() {
     filterWorks();
 }
 
-function addEventListeners() {
+function addEventListeners() { // Ajout des écouteurs d'évènement dès l'ouverture de la page.
     loginTab();
     openPopupWindow();
     openPhotoWindow();
